@@ -1,0 +1,103 @@
+<ion-header>
+  <mat-toolbar class="mat-elevation-z2" style="min-height: 80px; padding: 28px 0 0 0;">
+    <mat-toolbar-row>
+      <ion-menu-button menu="mains" color="dark"></ion-menu-button>
+      <button mat-button class="fa fa-search" (click)="showSearch = !showSearch"></button>
+      <button mat-button class="ml-auto" [disabled]="!titleChinese.valid" (click)="doSave('NO')">保存</button>
+      <button mat-button [disabled]="!writingForm.valid" (click)="doSave('YES')">发布</button>
+      <button mat-button (click)="goBack()">返回</button>
+    </mat-toolbar-row>
+    <mat-toolbar-row *ngIf="showSearch">
+      <div class="input-group px-2">
+        <input type="text" class="form-control" [formControl]="searchContent" (keydown.enter)="doSearch()">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" [disabled]="!searchContent.valid" (click)="doSearch()">
+            <span class="fa fa-search"></span>
+          </button>
+        </div>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="下拉刷新" refreshingSpinner="circles" refreshingText="加载中..."></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="showSearch && searchResult" class="bg-info p-2">
+    <mat-card [style.font-size]="fontSize + 'px'">
+      <div>
+        <span class="text-secondary">单词：</span>
+        <span>{{searchResult.name_english}}</span>
+      </div>
+      <div class="d-flex">
+        <div class="text-secondary">音标：{{searchResult.phonetic}} &nbsp;&nbsp;</div>
+        <div [ngClass]="audioClass" (click)="loadEnglish(searchResult)"></div>
+      </div>
+      <div class="d-flex">
+        <div class="text-secondary">释义：{{searchResult.name_chinese}} &nbsp;&nbsp;</div>
+        <div [ngClass]="audioClassChinese" (click)="loadChinese(searchResult)"></div>
+      </div>
+    </mat-card>
+  </div>
+  <br>
+
+  <div style="min-height: 1200px;">
+    <h3 class="text-center mt-4">课文抄写</h3>
+    <div class="d-flex flex-row-reverse">
+      <button mat-button color="accent" (click)="smallFont()">字体-</button>
+      <button mat-button color="primary" (click)="largeFont()">字体+</button>
+    </div>
+
+    <form [formGroup]="writingForm" novalidate class="py-3">
+      <h5 class="text-info">一、中文抄写</h5>
+      <br>
+      <mat-form-field>
+        <input matInput placeholder="标题" formControlName="titleChinese" [style.font-size]="fontSize + 'px'">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="作者" formControlName="authorChinese" [style.font-size]="fontSize + 'px'">
+      </mat-form-field>
+      <ion-item>
+        <ion-textarea placeholder="请输入中文内容..." formControlName="contentChinese" spellcheck autoGrow [style.font-size]="fontSize + 'px'"></ion-textarea>
+      </ion-item>
+
+      <h5 class="text-info my-5">二、英文抄写</h5>
+      <mat-form-field>
+        <input matInput placeholder="title" formControlName="titleEnglish" [style.font-size]="fontSize + 'px'">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="author" formControlName="authorEnglish" [style.font-size]="fontSize + 'px'">
+      </mat-form-field>
+      <ion-item>
+        <ion-textarea placeholder="请输入英文内容..." formControlName="contentEnglish" spellcheck autoGrow [style.font-size]="fontSize + 'px'"></ion-textarea>
+      </ion-item>
+
+
+      <h5 class="text-info my-5">三、重点单词<button mat-button (click)="addVocabulary()" class="fa fa-plus"></button></h5>
+      <div formArrayName="vocabularies">
+        <div *ngFor="let vocabulary of vocabularies.controls; let i=index" [formGroupName]="i" class="row">
+          <div class="col-sm-2 text-center">
+            <strong>单词#{{i + 1}}&nbsp;&nbsp;&nbsp;</strong><span (click)="removeVocabulary(i)" class="fa fa-minus-square text-danger"></span>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field>
+              <input matInput placeholder="英文" formControlName="englishWord" [style.font-size]="fontSize + 'px'">
+              <mat-error *ngIf="vocabulary.get('englishWord').dirty && vocabulary.get('englishWord').invalid">请输入英文字母</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field>
+              <input matInput placeholder="中文" formControlName="chineseWord" [style.font-size]="fontSize + 'px'">
+              <mat-error *ngIf="vocabulary.get('chineseWord').dirty && vocabulary.get('chineseWord').invalid">请输入中文文字</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</ion-content>
+
+

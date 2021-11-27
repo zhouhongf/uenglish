@@ -1,0 +1,35 @@
+<ion-header>
+  <mat-toolbar color="primary" style="height: 80px; padding: 28px 0 0 0;">
+    <button mat-button type="button" class="fa fa-chevron-left" (click)="goBack()"></button>
+    <h5>{{showNickname ? '用户昵称' : '用户设置'}}</h5>
+  </mat-toolbar>
+</ion-header>
+
+<ion-content color="medium">
+  <div *ngIf="!showNickname">
+    <ion-list>
+      <ion-item detail button (click)="showNickname = true">
+        <ion-label>设置昵称</ion-label>
+      </ion-item>
+      <ion-item detail button (click)="updateUserAvatar()">
+        <ion-label>设置头像</ion-label>
+      </ion-item>
+      <ion-item detail button routerLink="/sysuser/changePassword">
+        <ion-label>修改密码</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="showNickname">
+    <mat-form-field class="py-2">
+      <label>
+        <input matInput style="font-size: 20px;" type="text" [formControl]="nickname" placeholder="给自己取个好名字">
+      </label>
+      <mat-error *ngIf="nickname.hasError('pattern')">昵称长度为2到18个中文字</mat-error>
+    </mat-form-field>
+    <br><br>
+    <ion-button class="ion-margin" expand="block" (click)="saveNickname()" [disabled]="!nickname.valid">保存</ion-button>
+  </div>
+</ion-content>
+
+

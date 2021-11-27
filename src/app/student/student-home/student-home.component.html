@@ -1,0 +1,46 @@
+<ion-header>
+  <mat-toolbar class="mat-elevation-z2" style="height: 80px; padding: 28px 0 0 0;">
+    <ion-menu-button menu="mains" color="dark"></ion-menu-button>
+  </mat-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="py-4">
+    <h5 class="text-primary">文章抄写</h5>
+    <hr>
+    <div>累计数量：<span class="text-info" style="font-size: 24px;">{{paperCount}}</span>篇</div>
+    <div class="d-flex flex-wrap">
+      <div>最近抄写：</div>
+      <div class="text-info">
+        <div *ngFor="let title of paperTitles">《{{title.title_chinese}}》</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="py-4">
+    <h5 class="text-primary">最近考试</h5>
+    <hr>
+    <div *ngFor="let exam of lastFiveExamJournal">
+      <span>{{exam.examType}}：{{exam.examScore}}</span>
+    </div>
+  </div>
+
+  <div class="py-4">
+    <h5 class="text-primary">考试成绩</h5>
+    <hr>
+    <div *ngFor="let item of examJournalSummary" class="d-flex flex-wrap py-2">
+      <div class="font-weight-bold">{{item['examType']}}</div>
+      <div class="p-2">
+        <div>考试次数：{{item['num']}}</div>
+        <div>平均分数：<span class="text-info" style="font-size: 20px;">{{item['avg']}}</span></div>
+        <div>最高分数：{{item['max']}}</div>
+        <div>最低分数：{{item['min']}}</div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>
+
+
+
+

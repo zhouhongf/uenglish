@@ -1,0 +1,69 @@
+<ion-header>
+  <mat-toolbar class="mat-elevation-z2" style="height: 80px; padding: 28px 0 0 0;">
+    <h5 class="text-danger" *ngIf="timeUp">成绩：{{examScore}}</h5>
+    <app-time-count *ngIf="!timeUp" class="ml-auto pr-2 small" [endTime]="timeEnd" (onTimeUp)="doTimeUp($event)"></app-time-count>
+  </mat-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="alert alert-info" *ngIf="examType === '英译汉单选'">选择英语单词对应的中文意思</div>
+  <div class="alert alert-info" *ngIf="examType === '汉译英单选'">选择中文意思对应的英语单词</div>
+  <div class="alert alert-info" *ngIf="examType === '单词听写题'">在横线上填上恰当的英语单词</div>
+  <div class="alert alert-info" *ngIf="examType === '单词填空题'">根据上下文在空格中填写英语单词</div>
+
+  <div *ngIf="examType === '英译汉单选' || examType === '汉译英单选'">
+    <div *ngFor="let one of examSectionData; let i=index">
+      <div class="py-4 d-flex">
+        <h5>{{i + 1}}、{{one.question}}</h5>
+        <h5 class="ml-auto" *ngIf="showCorrectAnswer">(&nbsp;&nbsp;<span [ngClass]="one.answerSelected === one.answerCorrect ? 'text-info' : 'text-danger'">{{one.answerCorrect}}</span>&nbsp;&nbsp;)</h5>
+      </div>
+      <div class="px-2">
+        <mat-radio-group (change)="doRadioGroupChange($event, one.question)" [disabled]="timeUp">
+          <mat-radio-button color="primary" style="width: 100%; padding-bottom: 10px;" *ngFor="let two of one.answerConfuse" [value]="two">{{two}}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <hr>
+    </div>
+  </div>
+  <div *ngIf="examType === '单词听写题'">
+    <div *ngFor="let one of examSectionData; let i=index">
+      <div class="py-4 d-flex">
+        <div>{{i + 1}}、{{one.question}}</div>
+        <div class="ml-auto pr-2">
+          <span class="fa fa-volume-off" [id]="'voice-' + i" (click)="loadVoice(i, one.answerCorrect)"></span>
+        </div>
+      </div>
+      <mat-form-field style="width: 100%; font-size: 18px;">
+        <input matInput type="text" class="text-info" [id]="'input-' + i" (change)="doInputChange(i, one.question)" [disabled]="timeUp">
+        <span matSuffix *ngIf="showCorrectAnswer">(&nbsp;&nbsp;<span [ngClass]="one.answerSelected === one.answerCorrect ? 'text-info' : 'text-danger'">{{one.answerCorrect}}</span>&nbsp;&nbsp;)</span>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div *ngIf="examType === '单词填空题'">
+    <div *ngFor="let one of examSectionData; let i=index" class="py-4">
+      <h5 class="text-info">题目：{{i + 1}}</h5>
+      <div>{{one.contentChinese}}</div>
+      <div class="py-4">
+                <span *ngFor="let item of one['items']; let j=index">
+                    <span>{{item.question}}</span>
+                    <input type="text" *ngIf="item.answerCorrect" style="border-radius: 5px; border-style: groove;" [id]="'input-' + i + '-' + j" (change)="doInputChangeDoubleIndex(i, j)" [disabled]="timeUp">
+                </span>
+      </div>
+
+      <div *ngIf="showCorrectAnswer" class="pb-4">
+        <div><strong>正确答案：</strong></div>
+        <div *ngFor="let item of one['items']" class="text-danger">{{item.answerCorrect}}</div>
+      </div>
+      <hr>
+    </div>
+  </div>
+
+  <div class="py-4">
+    <ion-button *ngIf="!timeUp" class="ion-padding" expand="block" color="danger" (click)="doEndExam()">结束答题</ion-button>
+    <ion-button *ngIf="timeUp" class="ion-padding" expand="block" (click)="showCorrectAnswer = !showCorrectAnswer">{{showCorrectAnswer ? '隐藏答案' : '查看答案'}}</ion-button>
+    <ion-button *ngIf="timeUp" class="ion-padding" expand="block" (click)="goBack()">退出</ion-button>
+  </div>
+  <br><br>
+
+</ion-content>

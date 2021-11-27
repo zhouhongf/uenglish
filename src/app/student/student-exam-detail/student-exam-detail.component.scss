@@ -1,0 +1,66 @@
+.play-audio {
+  width: 20px;
+  height: 20px;
+  background: url(./../../../assets/images/ionic/volume-off-sharp.svg) no-repeat;
+  background-size: cover;
+}
+
+.pause-audio {
+  width: 20px;
+  height: 20px;
+  background: url(./../../../assets/images/ionic/volume-high-sharp.svg) no-repeat;
+  background-size: cover;
+}
+
+.black-audio {
+  width: 20px;
+  height: 20px;
+  background: url(./../../../assets/images/ionic/volume-mute-sharp.svg) no-repeat;
+  background-size: cover;
+}
+
+.parent-div-audio {
+  display: flex;
+  width: 220px;
+  height: 40px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 3px 10px 0 rgba(98, 146, 193, 0.26);
+  opacity: 0.99;
+  border-radius: 1px;
+
+  .audio-time {
+    width: 15%;
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(97, 172, 249, 1);
+    line-height: 38px;
+  }
+
+  .allProgress {
+    display: flex;
+    width: 50%;
+    height: 5px;
+    background-color: #D2D5E0;
+    border-radius: 5px;
+    margin-left: 15px;
+    margin-top: 16px;
+
+    .pro-slider {
+      width: 0;
+      height: 5px;
+      background-color: #61ACF9;
+    }
+
+    .drag-circle {
+      width: 9px;
+      height: 9px;
+      margin-top: -2px;
+      border-radius: 50%;
+      cursor: pointer;
+      background-color: rgb(38, 132, 175);
+    }
+  }
+}
+

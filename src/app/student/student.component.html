@@ -1,0 +1,36 @@
+<ion-split-pane contentId="mains-content" [when]="mediaQueryList.matches">
+  <ion-menu contentId="mains-content" menuId="mains" side="start" swipeGesture="true">
+    <ion-header class="ion-no-border">
+      <mat-toolbar style="background: rgba(255,255,255,0); height: 80px; padding-top: 28px;">
+        <div>{{nickname}}</div>
+        <button mat-button class="ml-auto" (click)="logout()"><span class="fa fa-power-off"></span></button>
+      </mat-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle autoHide="false" menu="mains">
+          <div class="d-flex justify-content-center">
+            <ion-thumbnail style="cursor: pointer;" (click)="goToPage({url: '/sysuser'})">
+              <img [src]="avatar ? avatar : avatarDefault" alt="头像">
+            </ion-thumbnail>
+          </div>
+        </ion-menu-toggle>
+      </ion-list>
+
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-description>菜单</mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item style="font-size: medium; padding-left: 30%;" *ngFor="let p of theStudentPages" (click)="goToPage(p)">{{p.title}}</a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="mains-content"></ion-router-outlet>
+
+</ion-split-pane>

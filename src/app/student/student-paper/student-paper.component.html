@@ -1,0 +1,51 @@
+<ion-header>
+  <mat-toolbar class="mat-elevation-z2" style="height: 80px; padding: 28px 0 0 0;">
+    <ion-menu-button menu="mains" color="dark"></ion-menu-button>
+    <button mat-button *ngIf="showDetail" class="ml-auto fa fa-plus-circle" (click)="create()"></button>
+    <button mat-button *ngIf="showDetail" class="fa fa-minus-circle" (click)="toDelete = !toDelete"></button>
+    <button mat-button *ngIf="showDetail" class="fa fa-chevron-circle-left" (click)="showDetail = false"></button>
+  </mat-toolbar>
+</ion-header>
+
+<ion-content [hidden]="showDetail">
+  <div class="list-group">
+    <button type="button" class="list-group-item list-group-item-action" *ngFor="let data of writingTypeData" (click)="getList(data.value)">{{data.value}}</button>
+  </div>
+</ion-content>
+
+<ion-content *ngIf="showDetail">
+  <div class="table-responsive-sm">
+    <table class="table table-hover table-borderless small">
+      <thead class="thead-light">
+      <tr class="text-center">
+        <th scope="col" *ngIf="toDelete">#</th>
+        <th scope="col">标题</th>
+        <th scope="col">创建</th>
+        <th scope="col">发布</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of dataShow;" (click)="choose(data)">
+        <th scope="row" class="text-center text-danger" *ngIf="toDelete"><span class="fa fa-minus-circle"></span></th>
+        <td>{{data.titleChinese}}</td>
+        <td class="text-center">{{data.createTime | date:'yyyy-MM-dd'}}</td>
+        <td class="text-center">{{data.status}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="dataShow.length > 0" class="my-5 mx-2 d-flex btn-group mat-elevation-z2">
+    <button type="button" class="btn btn-secondary" *ngIf="pageIndex > 1" (click)="doPagePrevious()">
+      <span class="fa fa-angle-left"></span>
+    </button>
+    <button type="button" class="btn btn-secondary" [disabled]="pageIndex === 1" (click)="doPage()">{{pageIndex ? pageIndex : '下一页'}}</button>
+    <button type="button" class="btn btn-secondary" *ngIf="pageIndex > 1" (click)="doPageNext()">
+      <span class="fa fa-angle-right"></span>
+    </button>
+  </div>
+
+</ion-content>
+
+
+

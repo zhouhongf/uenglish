@@ -1,0 +1,80 @@
+<ion-header>
+  <mat-toolbar class="mat-elevation-z2" style="height: 80px; padding: 28px 0 0 0;">
+    <ion-menu-button menu="mains" color="dark"></ion-menu-button>
+    <h5 *ngIf="selectTimeRange" class="ml-auto">考试设置</h5>
+    <button mat-button *ngIf="selectTimeRange" class="fa fa-chevron-circle-left" (click)="selectTimeRange = false"></button>
+  </mat-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="row" *ngIf="!selectTimeRange">
+    <div class="col-4 p-0 box-col">
+      <button mat-stroked-button class="box-button" (click)="select('English')">
+        <span class="fa fa-etsy text-primary" style="font-size: 30px;"></span>
+        <div class="text-muted">英语</div>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="selectTimeRange">
+    <div class="alert alert-danger" *ngIf="timeRangeEnd.dirty && firstFormGroup.hasError('misrange')">结束日期不得早于起始日期</div>
+
+    <mat-vertical-stepper class="my-4" #stepper linear (selectionChange)="doStepperChange($event)">
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>考试范围</ng-template>
+          <mat-radio-group formControlName="timeRangeSelectTemp" (change)="doRadioGroupChange($event)">
+            <mat-radio-button class="p-4" *ngFor="let one of timeRanges" [value]="one.value">{{one.name}}</mat-radio-button>
+          </mat-radio-group>
+          <div *ngIf="timeRangeSelectTemp.value === 0">
+            <mat-form-field>
+              <input matInput [matDatepicker]="pickerStart" placeholder="起始日期" formControlName="timeRangeStart" [max]="maxDate" [min]="minDate">
+              <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+              <mat-datepicker touchUi #pickerStart></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [matDatepicker]="pickerEnd" placeholder="结束日期" formControlName="timeRangeEnd" [max]="maxDate" [min]="minDate">
+              <mat-datepicker-toggle matSuffix [for]="pickerEnd" [disabled]="!timeRangeStart.valid"></mat-datepicker-toggle>
+              <mat-datepicker touchUi #pickerEnd [disabled]="!timeRangeStart.valid"></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="text-right py-4">
+            <button mat-stroked-button matStepperNext color="primary">下一步</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup" errorMessage="必须设置题目类型">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>题目类型</ng-template>
+          <mat-selection-list formControlName="questionTypes">
+            <mat-list-option *ngFor="let one of questionTypeList" [value]="one.value">{{one.value}}</mat-list-option>
+          </mat-selection-list>
+          <div class="text-right py-4">
+            <button mat-stroked-button matStepperNext color="primary">下一步</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>设置完成</ng-template>
+        <div *ngIf="examMaterial">
+          <h5 class="text-center text-info">考试内容</h5>
+          <hr>
+          <mat-list>
+            <mat-list-item *ngFor="let one of examMaterial">
+              <div matLine> {{one.title_chinese}} </div>
+              <p matLine> {{one.title_english}} </p>
+            </mat-list-item>
+          </mat-list>
+          <hr>
+        </div>
+
+        <div class="text-info text-right px-2">点击“确定”开始考试</div>
+        <div class="text-right py-4">
+          <button mat-stroked-button color="accent" (click)="stepper.reset()">重置</button>
+          <button mat-stroked-button color="primary" (click)="goToExam()">确定</button>
+        </div>
+      </mat-step>
+    </mat-vertical-stepper>
+  </div>
+
+</ion-content>

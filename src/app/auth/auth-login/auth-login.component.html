@@ -1,0 +1,26 @@
+<ion-header>
+  <mat-toolbar color="primary" style="height: 80px; padding: 28px 0 0 0;">
+    <button mat-button type="button" class="fa fa-chevron-left" routerLink="/"></button>
+    <h5>用户登录</h5>
+    <button mat-button class="ml-auto" routerLink="/auth/register">注册</button>
+  </mat-toolbar>
+</ion-header>
+
+<ion-content color="light">
+  <form [formGroup]="loginForm" novalidate>
+    <ion-list>
+      <ion-item>
+        <ion-input clearInput type="text" placeholder="账号" formControlName="username"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input clearInput type="password" placeholder="密码" formControlName="password"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding py-5">
+      <ion-button expand="block" (click)="login()" [disabled]="!loginForm.valid">登录</ion-button>
+    </div>
+
+  </form>
+</ion-content>
+

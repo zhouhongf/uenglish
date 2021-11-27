@@ -1,0 +1,10 @@
+<ion-header>
+  <mat-toolbar class="mat-elevation-z2" style="height: 80px; padding: 28px 0 0 0;">
+    <button mat-button class="fa fa-chevron-left" routerLink="/student/exam"></button>
+  </mat-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="alert alert-info">注意：每个部分只有一次答题机会。</div>
+  <ion-button class="ion-padding" size="large" expand="block" fill="outline" *ngFor="let one of questionTypes" [disabled]="questionTypesFinish.indexOf(one) !== -1" (click)="takeThis(one)">{{one}}</ion-button>
+</ion-content>
